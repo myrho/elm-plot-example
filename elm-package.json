@@ -5,7 +5,7 @@
     "license": "BSD3",
     "source-directories": [
         ".",
-        "lib/elm-plot/src"
+        "../elm-plot/src"
     ],
     "exposed-modules": [],
     "dependencies": {
