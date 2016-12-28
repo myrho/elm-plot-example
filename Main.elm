@@ -1,8 +1,9 @@
 import Plot
 import Plot.Axis as Axis
 import Plot.Label as Label
-import Plot.Pile as Pile
 import Plot.Tick as Tick
+import Plot.Bars as Bars
+import Plot.Line as Line
 import Array
 
 type alias Group =
@@ -37,7 +38,10 @@ groups =
 main =
     Plot.plot
       [ Plot.size (800,600)
-      , Plot.padding (30,30)
+      , Plot.margin (60,60,60,60)
+      , Plot.padding (0, 40)
+      , Plot.rangeLowest (always 0)
+      , Plot.rangeHighest (always 2)
       ]
       [ Plot.horizontalGrid [ ]
       , Plot.xAxis 
@@ -55,19 +59,21 @@ main =
             ]
           ]
         ]
-      , Plot.pile
-        [ ]
+      , Plot.yAxis 
+        [ Axis.line
+          [ Line.stroke "black" ]
+        ]
+      , Plot.bars
+        [ Bars.maxBarWidthPer 85
+        ]
+        [ [ Bars.fill "red" ]
+        , [ Bars.fill "green" ]
+        , [ Bars.fill "blue" ]
+        ]
         <| Array.toList
-        <| Array.map 
-            (\group ->
-              Pile.bars
-                [ --Bars.label (\y -> Svg.text_ [] [ Svg.text <| toString y ])
-                ]
-                <| List.indexedMap 
-                    (\i unit ->
-                      (toFloat i, unit.value)
-                    )
-                    group.units
+        <| Array.indexedMap 
+            (\i group ->
+                (toFloat i, List.map .value group.units)
             )
             groups
       ]
