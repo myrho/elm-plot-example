@@ -75,7 +75,7 @@ main =
             , [ Bars.fill "blue" ]
             ]
             (Bars.toBarData
-                { yValues = (\group -> List.map .value group.units)
+                { yValues = .units >> (List.map .value)
                 , xValue = Nothing
                 }
                 (Array.toList groups)
