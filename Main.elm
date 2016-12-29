@@ -7,6 +7,7 @@ import Plot.Label as Label
 import Plot.Tick as Tick
 import Plot.Bars as Bars
 import Plot.Line as Line
+import Plot.Grid as Grid
 import Array
 
 
@@ -29,18 +30,29 @@ groups =
             [ Unit "u1" 23.5
             , Unit "u2" 27.8
             , Unit "u3" 10.3
+            , Unit "v4" -8.1
             ]
         , Group "group2"
             [ Unit "v1" 13.9
             , Unit "v2" 12.0
             , Unit "v3" 8.1
+            , Unit "v4" 8.1
             ]
         , Group "group3"
             [ Unit "w1" 15.9
             , Unit "w2" 15.4
             , Unit "w3" 18.2
+            , Unit "v4" 8.1
+            ]
+        , Group "group4"
+            [ Unit "w1" 15.9
+            , Unit "w2" 15.4
+            , Unit "w3" 18.2
             ]
         ]
+
+barLabel =
+  toString
 
 
 main : Svg.Svg msg
@@ -52,7 +64,10 @@ main =
         , Plot.rangeLowest (always -0.5)
         , Plot.rangeHighest (\x -> x + 0.5)
         ]
-        [ Plot.horizontalGrid []
+        [ Plot.horizontalGrid 
+          [ Grid.lines
+            [ Line.stroke "grey" ]
+          ]
         , Plot.xAxis
             [ Axis.tick
                 [ Tick.delta 1
@@ -69,10 +84,16 @@ main =
             ]
         , Plot.bars
             [ Bars.maxBarWidthPer 85
+            , Bars.label
+                [ Label.classes [ "label-class" ]
+                , Label.displace ( 12, 0 )
+                , Label.format barLabel 
+                ]
             ]
             [ [ Bars.fill "red" ]
             , [ Bars.fill "green" ]
             , [ Bars.fill "blue" ]
+            , [ Bars.fill "yellow" ]
             ]
             (Bars.toBarData
                 { yValues = .units >> (List.map .value)
